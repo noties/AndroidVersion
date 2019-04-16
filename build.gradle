@@ -1,0 +1,40 @@
+buildscript {
+    repositories {
+        jcenter()
+        google()
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.2'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+    group = GROUP
+    version = VERSION_NAME
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    config = [
+            'min-sdk': 16,
+            'target-sdk': 28,
+            'build-tools': '28.0.3',
+            'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
+    ]
+}
+
+if (hasProperty('local')) {
+    if (!hasProperty('LOCAL_MAVEN_URL')) {
+        throw new RuntimeException('Cannot publish to local maven as no such property exists: LOCAL_MAVEN_URL')
+    }
+    ext.RELEASE_REPOSITORY_URL = LOCAL_MAVEN_URL
+    ext.SNAPSHOT_REPOSITORY_URL = LOCAL_MAVEN_URL
+}
